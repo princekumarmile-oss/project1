@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 import "./App.css";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.VITE_API_URL || "https://project1-1-gyvr.onrender.com";
 
 const initialForm = { name: "", email: "", password: "" };
 const initialApplicationForm = {
