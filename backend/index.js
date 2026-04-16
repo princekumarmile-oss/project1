@@ -19,6 +19,7 @@ app.use(
       if (!origin) return callback(null, true);
       if (/^http:\/\/localhost:\d+$/.test(origin)) return callback(null, true);
       if (/^http:\/\/127\.0\.0\.1:\d+$/.test(origin)) return callback(null, true);
+      if (/^https:\/\/.*\.vercel\.app$/.test(origin)) return callback(null, true);
       return callback(new Error("Not allowed by CORS"));
     },
   })
