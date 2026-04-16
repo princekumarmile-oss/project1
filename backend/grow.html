@@ -1,0 +1,366 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GrowUp Admissions</title>
+  <style>
+    :root {
+      --dark: #16213e;
+      --blue: #2b5876;
+      --purple: #4e4376;
+      --accent: #f6a800;
+      --bg: #eef2f7;
+      --card: #ffffff;
+      --text: #1f2b4d;
+      --muted: #596b8c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 12px 30px rgba(14, 28, 60, 0.16);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 18px 22px;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      letter-spacing: -0.04em;
+    }
+
+    .brand p {
+      margin: 0;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.95rem;
+    }
+
+    .nav-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    nav a {
+      color: white;
+      padding: 10px 18px;
+      font-weight: 600;
+      border-radius: 999px;
+      transition: background 0.25s ease, transform 0.25s ease;
+    }
+
+    nav a:hover,
+    nav a.active {
+      background: rgba(255,255,255,0.15);
+      transform: translateY(-1px);
+    }
+
+    .btn-nav {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .hero {
+      max-width: 1180px;
+      margin: -20px auto 0;
+      background: white;
+      border-radius: 28px;
+      box-shadow: 0 30px 70px rgba(18, 34, 67, 0.12);
+      overflow: hidden;
+      padding: 60px 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: rgba(210, 146, 20, 0.12);
+      top: -60px;
+      right: -60px;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: clamp(2.4rem, 4vw, 3.6rem);
+      max-width: 760px;
+      color: var(--dark);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      margin: 24px auto 0;
+      max-width: 740px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .hero .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 32px;
+      padding: 16px 28px;
+      background: var(--accent);
+      color: #16213e;
+      border-radius: 999px;
+      font-weight: 700;
+      box-shadow: 0 14px 28px rgba(246,168,0,0.2);
+    }
+
+    .hero .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .section {
+      padding: 60px 22px;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .section h2 {
+      margin-bottom: 14px;
+      font-size: 2.1rem;
+      text-align: center;
+      color: var(--dark);
+    }
+
+    .section p.lead {
+      margin: 0 auto 40px;
+      max-width: 760px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 18px 40px rgba(22, 39, 85, 0.08);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 22px 48px rgba(22, 39, 85, 0.12);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: var(--blue);
+    }
+
+    .card p {
+      margin: 14px 0 0;
+      color: var(--muted);
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 16px;
+      max-width: 520px;
+      margin: 0 auto;
+      background: var(--card);
+      padding: 28px;
+      border-radius: 22px;
+      box-shadow: 0 18px 40px rgba(22, 39, 85, 0.08);
+    }
+
+    .contact-list div {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+    }
+
+    footer {
+      background: var(--dark);
+      color: #dfe5f1;
+      text-align: center;
+      padding: 24px 20px;
+    }
+
+    footer p {
+      margin: 0;
+      opacity: 0.85;
+    }
+
+    @media (max-width: 980px) {
+      .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar,
+      .hero,
+      .section {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      nav {
+        justify-content: center;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h2 {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <h1>GrowUp Admissions</h1>
+      <p>Trusted counseling for top college admissions across India.</p>
+    </div>
+    <a href="#contact" class="btn-nav">book your seat</a>
+  </div>
+  <div class="nav-wrap">
+    <nav>
+      <a href="#home" class="active">Home</a>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-content">
+    <h2>Secure the right college, course, and scholarship with expert admission support.</h2>
+    <p>GrowUp Admissions delivers personalized guidance, application review, and scholarship planning so students can move forward with confidence.</p>
+    <a href="#contact" class="btn">Get Free Counseling</a>
+  </div>
+</section>
+
+<section class="section" id="services">
+  <h2>Our Services</h2>
+  <p class="lead">From program selection to final application submission, our services help every student take the next step with clarity.</p>
+  <div class="cards">
+    <div class="card">
+      <h3>Career Guidance</h3>
+      <p>Personalized counseling that aligns your interests with high-growth courses and top institutions.</p>
+    </div>
+    <div class="card">
+      <h3>Admission Strategy</h3>
+      <p>Step-by-step planning for college applications, entrance test preparation, and document review.</p>
+    </div>
+    <div class="card">
+      <h3>Scholarship Support</h3>
+      <p>Identify funding opportunities and create strong applications to reduce your education costs.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <h2>About Us</h2>
+  <p class="lead">GrowUp Admissions helps students across India make confident admission choices with honest advice and proven support.</p>
+  <div class="cards">
+    <div class="card">
+      <h3>Experienced Advisors</h3>
+      <p>Our team has guided hundreds of students through successful applications and admissions.</p>
+    </div>
+    <div class="card">
+      <h3>Clear Roadmaps</h3>
+      <p>We build a practical plan for every student based on their timeline, goals, and budget.</p>
+    </div>
+    <div class="card">
+      <h3>Continuous Support</h3>
+      <p>From initial consultation to final admission, we stay with you until the process is complete.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <h2>Contact Us</h2>
+  <p class="lead">Ready to begin? Reach out now and one of our counselors will connect with you right away.</p>
+  <div class="contact-list">
+    <div><strong>Email:</strong><span>info@growupadmissions.com</span></div>
+    <div><strong>Phone:</strong><span>+91 8962253601</span></div>
+    <div><strong>Location:</strong><span>MIG-210 Gautam Nagar, Bhopal, MP 462023</span></div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 GrowUp Admissions. All Rights Reserved.</p>
+</footer>
+</body>
+</html>
