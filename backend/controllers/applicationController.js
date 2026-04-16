@@ -1,4 +1,5 @@
 const Application = require("../models/Application");
+const { sendApplicationEmail } = require("../utils/emailService");
 
 const createApplication = async (req, res) => {
   try {
@@ -16,6 +17,12 @@ const createApplication = async (req, res) => {
       phoneNumber,
       address,
     });
+
+    // Send email to admin
+    await sendApplicationEmail(
+      { courseName, firstName, lastName, phoneNumber, address },
+      req.user.email
+    );
 
     return res.status(201).json({
       message: "Application submitted successfully",
