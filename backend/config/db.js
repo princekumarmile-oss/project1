@@ -17,8 +17,9 @@ const ensureTables = async () => {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS applications (
       id SERIAL PRIMARY KEY,
-      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
       course_name TEXT NOT NULL,
+      email TEXT,
       first_name TEXT NOT NULL,
       last_name TEXT NOT NULL,
       phone_number TEXT NOT NULL,
@@ -27,6 +28,9 @@ const ensureTables = async () => {
       updated_at TIMESTAMPTZ DEFAULT NOW()
     )
   `);
+
+  await pool.query(`ALTER TABLE applications ALTER COLUMN user_id DROP NOT NULL`);
+  await pool.query(`ALTER TABLE applications ADD COLUMN IF NOT EXISTS email TEXT`);
 };
 
 const connectDB = async (connectionString) => {

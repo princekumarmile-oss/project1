@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   FaLaptopCode,
   FaFlask,
@@ -46,7 +46,7 @@ const dashboard = {
     address: "MIG-210, Gautam Nagar, Bhopal, MP 462023",
   },
   courses: [
-    { id: 1, name: "B.Tech", duration: "4 years" },
+    { id: 1, name: "B.Tech", duration: "4 years"},
     { id: 2, name: "M.Tech", duration: "2 years" },
     { id: 3, name: "MBA", duration: "2 years" },
     { id: 4, name: "BCA", duration: "3 years" },
@@ -70,7 +70,17 @@ const highlights = [
 function App() {
   const heroTitle = useMemo(() => dashboard.heading, []);
   const coursesRef = useRef(null);
+  const applicationRef = useRef(null);
   const contactRef = useRef(null);
+  const API_URL = import.meta.env.VITE_API_URL || "";
+
+  const [selectedCourse, setSelectedCourse] = useState(dashboard.courses[0].name);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [address, setAddress] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
 
   const scrollToCourses = () => {
     coursesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -78,6 +88,52 @@ function App() {
 
   const scrollToContact = () => {
     contactRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const scrollToApplication = (courseName) => {
+    setSelectedCourse(courseName);
+    applicationRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const submitApplication = async (event) => {
+    event.preventDefault();
+    setStatusMessage("");
+
+    if (!selectedCourse || !firstName || !lastName || !email || !phoneNumber || !address) {
+      setStatusMessage("Please complete all fields before submitting.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/api/applications`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          courseName: selectedCourse,
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
+          address,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Unable to submit application.");
+      }
+
+      setStatusMessage("Application sent successfully. We will contact you soon.");
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPhoneNumber("");
+      setAddress("");
+    } catch (error) {
+      setStatusMessage(error.message || "Submission failed. Please try again.");
+    }
   };
 
   return (
@@ -147,11 +203,58 @@ function App() {
                 </div>
                 <h3>{course.name}</h3>
                 <p className="course-duration">Duration: {course.duration}</p>
-                <button className="btn">Apply Now</button>
+                <button className="btn" onClick={() => scrollToApplication(course.name)}>
+                  Apply Now
+                </button>
               </article>
             );
           })}
         </div>
+      </section>
+
+      <section className="application-form" ref={applicationRef}>
+        <div className="section-head">
+          <h2>Apply Now</h2>
+          <p>Fill in your details and submit. We’ll send your application to the admissions team immediately.</p>
+        </div>
+        <form className="form-grid" onSubmit={submitApplication}>
+          <div className="form-group">
+            <label>Course</label>
+            <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)}>
+              {dashboard.courses.map((course) => (
+                <option key={course.id} value={course.name}>
+                  {course.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label>First Name</label>
+            <input value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First name" />
+          </div>
+          <div className="form-group">
+            <label>Last Name</label>
+            <input value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last name" />
+          </div>
+          <div className="form-group">
+            <label>Email</label>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address" />
+          </div>
+          <div className="form-group">
+            <label>Phone</label>
+            <input value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="Phone number" />
+          </div>
+          <div className="form-group full-width">
+            <label>Address</label>
+            <textarea value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Residential address" rows={4} />
+          </div>
+          <div className="form-actions full-width">
+            <button className="btn" type="submit">
+              Submit Application
+            </button>
+            {statusMessage && <p className="status-message">{statusMessage}</p>}
+          </div>
+        </form>
       </section>
 
       <section className="stats">

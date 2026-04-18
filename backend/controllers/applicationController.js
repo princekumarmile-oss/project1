@@ -3,15 +3,18 @@ const { sendApplicationEmail } = require("../utils/emailService");
 
 const createApplication = async (req, res) => {
   try {
-    const { courseName, firstName, lastName, phoneNumber, address } = req.body;
+    const { courseName, firstName, lastName, email, phoneNumber, address } = req.body;
 
-    if (!courseName || !firstName || !lastName || !phoneNumber || !address) {
+    if (!courseName || !firstName || !lastName || !email || !phoneNumber || !address) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    const userId = req.user?.id || null;
+
     const newApplication = await Application.create({
-      userId: req.user.id,
+      userId,
       courseName,
+      email,
       firstName,
       lastName,
       phoneNumber,
@@ -21,7 +24,7 @@ const createApplication = async (req, res) => {
     // Send email to admin
     await sendApplicationEmail(
       { courseName, firstName, lastName, phoneNumber, address },
-      req.user.email
+      email
     );
 
     return res.status(201).json({
@@ -29,6 +32,7 @@ const createApplication = async (req, res) => {
       application: newApplication,
     });
   } catch (error) {
+    console.error("Application submission error:", error);
     return res.status(500).json({ message: "Could not submit application" });
   }
 };
