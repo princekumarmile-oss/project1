@@ -33,6 +33,14 @@ const courseMeta = {
     icon: FaLaptopCode,
     level: "Undergraduate",
   },
+  BBA: {
+    icon: FaBriefcase,
+    level: "Undergraduate",
+  },
+  "B.Sc": {
+    icon: FaRocket,
+    level: "Undergraduate",
+  },
 };
 
 const dashboard = {
@@ -46,10 +54,14 @@ const dashboard = {
     address: "MIG-210, Gautam Nagar, Bhopal, MP 462023",
   },
   courses: [
-    { id: 1, name: "B.Tech", duration: "4 years"},
+    { id: 1, name: "B.Tech", duration: "4 years" },
     { id: 2, name: "M.Tech", duration: "2 years" },
     { id: 3, name: "MBA", duration: "2 years" },
     { id: 4, name: "BCA", duration: "3 years" },
+    { id: 5, name: "BBA", duration: "3 years" },
+    { id: 6, name: "B.Pharma", duration: "4 years" },
+    { id: 7, name: "D.Pharma", duration: "2 years" },
+    { id: 8, name: "B.Sc", duration: "3 years" },
   ],
 };
 
@@ -216,6 +228,24 @@ function App() {
         <div className="section-head">
           <h2>Apply Now</h2>
           <p>Fill in your details and submit. We’ll send your application to the admissions team immediately.</p>
+        </div>
+        <div className="course-tabs">
+          {dashboard.courses.map((course) => (
+            <button
+              key={course.id}
+              type="button"
+              className={`course-tab ${selectedCourse === course.name ? "active" : ""}`}
+              onClick={() => setSelectedCourse(course.name)}
+            >
+              {course.name}
+            </button>
+          ))}
+        </div>
+        <div className="application-heading">
+          <h3>Selected: {selectedCourse}</h3>
+          <p>
+            {courseMeta[selectedCourse]?.level} • Duration: {dashboard.courses.find((course) => course.name === selectedCourse)?.duration}
+          </p>
         </div>
         <form className="form-grid" onSubmit={submitApplication}>
           <div className="form-group">
